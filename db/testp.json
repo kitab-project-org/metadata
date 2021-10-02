@@ -1,0 +1,84 @@
+{
+    "Shamela0007495": {
+        "OpenITIuri": "1206IbnCabdWahhab.AdabMashyIlaSalat.Shamela0007495-ara1",
+        "AuthorName": "محمد بن عبد الوهاب بن سليمان التميمي النجدي (المتوفى: 1206هـ)",
+        "Edition:Editor": "عبد الكريم بن محمد اللاحم وغيره",
+        "Date": "1206",
+        "Edition:Publisher": "جامعة الإمام محمد بن سعود، الرياض، المملكة العربية السعودية",
+        "Title": "آداب المشي إلى الصلاة (مطبوع ضمن مؤلفات الشيخ محمد بن عبد الوهاب، الجزء الثالث)",
+        "Genre": "فقه حنبلي"
+    },
+    "Shamela0012416": {
+        "OpenITIuri": "0230IbnSacd.TabaqatKubra.Shamela0012416-ara1",
+        "AuthorName": "أبو عبد الله محمد بن سعد بن منيع الهاشمي بالولاء، البصري، البغدادي المعروف بابن سعد (المتوفى: 230هـ)",
+        "Edition:Editor": "الدكتور/ عبد العزيز عبد الله السلومي",
+        "Edition:Date": "1416 هـ",
+        "Date": "230",
+        "Edition:Publisher": "مكتبة الصديق - الطائف، المملكة العربية السعودية",
+        "Title": "الجزء المتمم لطبقات ابن سعد [الطبقة الرابعة من الصحابة ممن أسلم عند فتح مكة وما بعد ذلك]",
+        "Genre": "التراجم والطبقات"
+    },
+    "Shia001950": {
+        "OpenITIuri": "0282IbnIshaqJahdami.FadlSalat.Shia001950-ara1",
+        "Genre": "مصادر الحديث السنية ـ القسم العام",
+        "Edition:Editor": "محمد ناصر الدين الألباني",
+        "Edition:Date": "1397",
+        "Date": "282",
+        "AuthorName": "الجهضمي",
+        "Title": "فضل الصلاة على النبي (ص)"
+    },
+    "JK011302": {
+        "OpenITIuri": "0251IbnZanjawayh.Amwal.JK011302-ara1",
+        "Genre": "كتب الفقه الإسلامي :: مسائل فقهية",
+        "AuthorName": "أبو أحمد حميد بن مخلد بن قتيبة بن عبد الله الخرساني المعروف بابن زنجويه (المتوفى : 251هـ)",
+        "Title": "الأموال لابن زنجويه",
+        "Date": "251"
+    },
+    "Sham30K0012398": {
+        "OpenITIuri": "1089IbnCimad.Shadharat.Sham30K0012398-ara1"
+    },
+    "Shamela0009953": {
+        "OpenITIuri": "0465IbnHawazinQushayri.RisalaQushayriyya.Shamela0009953-ara1",
+        "AuthorName": "عبد الكريم بن هوازن بن عبد الملك القشيري (المتوفى: 465هـ)",
+        "Edition:Editor": "الإمام الدكتور عبد الحليم محمود، الدكتور محمود بن الشريف",
+        "Date": "465",
+        "Edition:Publisher": "دار المعارف، القاهرة",
+        "Title": "الرسالة القشيرية",
+        "Genre": "الرقاق والآداب والأذكار"
+    },
+    "Shia002173": {
+        "OpenITIuri": "0561Samcani.AdabImla.Shia002173-ara1",
+        "Genre": "مصادر الحديث السنية ـ القسم العام",
+        "Edition:Editor": "شرح ومراجعة : سعيد محمد اللحام / بإشراف : مكتب الدراسات والبحوث العربية والإسلامية",
+        "Edition:Date": "1409 - 1989 م",
+        "Date": "562",
+        "AuthorName": "السمعاني",
+        "Title": "أدب الإملاء والإستملاء"
+    },
+    "Shia003695Vols": {
+        "OpenITIuri": "0548IbnHasanTabarsi.IclamWara.Shia003695Vols-ara1",
+        "Genre": "مصادر سيرة النبي والائمة",
+        "Edition:Editor": "مؤسسة آل البيت عليهم السلام لإحياء التراث",
+        "Edition:Date": "ربيع الأول 1417",
+        "Date": "548",
+        "AuthorName": "الشيخ الطبرسي",
+        "Title": "إعلام الورى بأعلام الهدى"
+    },
+    "Shamela0007663": {
+        "OpenITIuri": "1349IbnSahmanKhathcami.SawaciqMursala.Shamela0007663-ara1",
+        "AuthorName": "سليمان بن سحمان بن مصلح بن حمدان بن مصلح بن حمدان بن مسفر بن محمد بن مالك بن عامر الخثعمي , التبالي , العسيري , النجدي (المتوفى: 1349هـ)",
+        "Date": "1349",
+        "Edition:Publisher": "دار العاصمة، الرياض، المملكة العربية السعودية",
+        "Title": "الصواعق المرسلة الشهابية على الشبه الداحضة الشامية",
+        "Genre": "العقيدة"
+    },
+    "Shia003754Vols": {
+        "OpenITIuri": "1294IbnIbrahimQunduzi.YanabicMuwadda.Shia003754Vols-ara1",
+        "Genre": "مصادر سيرة النبي والائمة",
+        "Edition:Editor": "سيد علي جمال أشرف الحسيني",
+        "Edition:Date": "1416",
+        "Date": "1294",
+        "AuthorName": "القندوزي",
+        "Title": "ينابيع المودة لذوي القربى"
+    }
+}

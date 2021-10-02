@@ -1,0 +1,71 @@
+<html>
+
+<head>
+        <meta charset="UTF-8">
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css" /> -->
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <!-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script> -->
+   
+  
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.0.0/dt-1.10.16/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css" />
+    <!-- old version -->
+    <!-- <script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.0.0/dt-1.10.16/datatables.min.js"></script> -->
+    <!-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.18/b-1.5.6/b-html5-1.5.6/fh-3.1.4/r-2.2.2/rr-1.2.4/datatables.min.js"></script> -->
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.16/b-1.5.1/b-html5-1.5.1/cr-1.4.1/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.16/b-1.5.1/b-html5-1.5.1/cr-1.4.1/datatables.min.js"></script>
+    <script type="text/javascript" src="js/public.js"></script>
+    <script src="https://kit.fontawesome.com/03581ef0eb.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Amiri&display=swap" rel="stylesheet">
+    
+    <title>KITAB / OPENITI Metadata Search Application</title>
+
+</head> 
+
+<body>
+    <div style="float: left;">
+    <a href="http://www.kitab-project.org" target="_blank"><img src="images/kitab-logo.png" width="100px"/></a>
+</div>
+
+<div class="heading" style="height: 180px;">
+    <h2>KITAB Corpus Metadata (OpenITI)</h2>
+    <p>Last udpated in November 2019</p>
+    <p>The Open Islamicate Texts Initiative (OpenITI) is a multi-institutional effort to construct the first open-access machine-actionable scholarly corpus of premodern Islamicate texts. The co-PIs for the project are Maxim Romanov (University of Vienna), Sarah Bowen Savant (Aga Khan University-ISMC, London), and Matthew Miller (University of Maryland, College Park).The KITAB Project contributes to the Arabic section of the OpenITI and is responsible for this metadata.</p>
+    <p>We hope you will use the OpenITI and it will become a resource for scholars internationally. If you do use it, please cite it, using the following reference: 
+        Maxim Romanov & Masoumeh Seydi. (2019). OpenITI: a Machine-Readable Corpus of Islamicate Texts (Version 2019.1.1) [Data set]. <a href='http://doi.org/10.5281/zenodo.3082464' target="_blank">Zenodo.</a>  
+        </p>
+</div>
+
+<div class="info" style="float:left; width:50%; padding: 10px;"><div id='total'></div></div>
+<div id="container" style="float: left; width:100%">
+    
+    <table id="example" class="table table-striped table-hover table-sm" style="width:100%">
+        <thead class="thead-light">
+            <tr>
+                <!-- <th>Verion URI</th> -->
+                <th>Book Id</th>
+                <th>Died</th>
+                <th>Author</th>
+                <th>Book Title</th>
+                <th>Source</th>
+                <th>Word Count</th>
+                <th>Full Text Book URL</th>
+                
+            </tr>
+        </thead>
+ 
+    </table>
+
+  
+</div>
+
+</body>
+
+
+</html>
