@@ -106,16 +106,6 @@ var edgeEquals = function(edge, edge2){
   return objEquals(edge, edge2,  ["from", "to", "label"]);
 };
 
-// define whether the `edges` array contains an object with the same `from`, `to` and `label` values as a new edge:
-/*var edgeInEdges = function(edge, edges){
-  for (comp of edges){
-    if (edgeEquals(edge, comp)){
-      return true;
-    }
-  }
-  return false
-};*/
-
 // verbose explanation of the main book relation types, seen from the yml text:
 var bookRelVerbsSrc = {
   "COMM": " is a commentary on ",
@@ -124,6 +114,11 @@ var bookRelVerbsSrc = {
   "CONT": " is a continuation of ",
   "TRANSL": " is a translation of ",
   "TRANSM": " transmits ",
+  "REARR": " is a rearrangement of ",
+  "EXTRACT": " is an extract of ",
+  "CORRESPONDENT": " is an exchange with ",
+  "PART": " is a part of ",
+  "REWORK": " is a reworking of ",
 };
 
 // verbose explanation of the main book relation types, seen from the other text:
@@ -134,6 +129,11 @@ var bookRelVerbsDest = {
   "CONT": " was continued by ",
   "TRANSL": " was translated in ",
   "TRANSM": " was transmitted in ",
+  "REARR": " was rearranged in ",
+  "EXTRACT": " has an extract in ",
+  "CORRESPONDENT": " participates in an exchange with "
+  "PART": " has a part in "
+  "REWORK": " was reworked in ",
 };
 
 // define the colors to be used for the edges, dependent on the main relation type:
@@ -144,6 +144,11 @@ var edge_colors = {
   "CONT": "orange",
   "TRANSL": "green",
   "TRANSM": "black",
+  "REARR": "pink",
+  "EXTRACT": "lightgreen",
+  "CORRESPONDENT": "darkred",
+  "PART": "darkorange",
+  "REWORK": "grey",
 };
 
 // define the roundness of the edge's curve, dependent on the main relation type:
@@ -155,6 +160,11 @@ var edge_roundness = {
   "CONT": 0.7,
   "TRANSL": 0.5,
   "TRANSM": 0.9,
+  "REARR": 0.8,
+  "EXTRACT": 0.75,
+  "CORRESPONDENT": 0.2,
+  "PART": 0.4,
+  "REWORK": "0.6"
 };
 
 // create book relations graph:
@@ -225,9 +235,9 @@ var createGraph = function(graph_div, bookuri, bookRelations){
         font: {align: "middle"},         // location of the displayed label: on the edge
         arrows: "to",                    // location of the arrowhead
         color: edge_colors[relObj["main_rel_type"]],
-        title: relObj["source"] + bookRelVerbsSrc[relObj["main_rel_type"]] + relObj["dest"],  // popup message on hover
+        title: relObj["source"] + (bookRelVerbsSrc[relObj["main_rel_type"]] || " " + relObj["main_rel_type"] + " ") + relObj["dest"],  // popup message on hover
         smooth: {
-          roundness: edge_roundness[relObj["main_rel_type"]]   // make sure edges of different types do not overlap
+          roundness: edge_roundness[relObj["main_rel_type"]] || 0.0  // make sure edges of different types do not overlap
         }
       };
       //if (! edges.includes(edge)){
@@ -328,9 +338,9 @@ var fillModal = function(bookuri, graph_div){
   for (i = 0; i < bookRelations[bookuri].length; i++) {
     var relObj = bookRelations[bookuri][i];
     if (bookuri === relObj["source"]) {
-      relStr += "<li>" + bookRelVerbsSrc[relObj["main_rel_type"]] + relObj["dest"] + "</li>";
+      relStr += "<li>" + (bookRelVerbsSrc[relObj["main_rel_type"]] || " " + relObj["main_rel_type"] + " ") + relObj["dest"] + "</li>";
     } else {
-      relStr += "<li>" + bookRelVerbsDest[relObj["main_rel_type"]] + relObj["source"] + "</li>";
+      relStr += "<li>" + (bookRelVerbsDest[relObj["main_rel_type"]] || " " + relObj["main_rel_type"] + " ") + relObj["source"] + "</li>";
     }
   }
   relStr += "</ul>";
