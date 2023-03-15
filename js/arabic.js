@@ -131,9 +131,9 @@ var bookRelVerbsDest = {
   "TRANSM": " was transmitted in ",
   "REARR": " was rearranged in ",
   "EXTRACT": " has an extract in ",
-  "CORRESPONDENT": " participates in an exchange with "
-  "PART": " has a part in "
-  "REWORK": " was reworked in ",
+  "CORRESPONDENT": " participates in an exchange with ",
+  "PART": " has a part in ",
+  "REWORK": " was reworked in "
 };
 
 // define the colors to be used for the edges, dependent on the main relation type:
