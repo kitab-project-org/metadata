@@ -1,7 +1,7 @@
 var table;
+const url = "https://raw.githubusercontent.com/OpenITI/kitab-metadata-automation/master/output/OpenITI_Github_clone_metadata_light.json?v1";
+const bookRelationsUrl = "https://raw.githubusercontent.com/OpenITI/kitab-metadata-automation/master/output/OpenITI_Github_clone_book_relations.json?v1";
 var issueURItempl = "<a href ='https://github.com/OpenITI/Annotation/issues/new?";
-var url = "https://raw.githubusercontent.com/OpenITI/kitab-metadata-automation/master/output/OpenITI_Github_clone_metadata_light.json?v1";
-var bookRelationsUrl = "https://raw.githubusercontent.com/OpenITI/kitab-metadata-automation/master/output/OpenITI_Github_clone_book_relations.json?v1";
 issueURItempl += "assignees=&labels=URI+change+suggestion&template=change-uri.md&title=";
 //url ="db/OpenITI_metadata_light-isnad-arabic-28052020.json"
 
@@ -10,7 +10,7 @@ issueURItempl += "assignees=&labels=URI+change+suggestion&template=change-uri.md
 /////////////// BOOK RELATIONS POPUP ////////////////////////////////////////////
 
 // check whether two objects have the same values for the given keys:
-var objEquals = function(obj1, obj2, keys){
+const objEquals = function(obj1, obj2, keys){
   for (const k of keys){
     if (obj1[k] !== obj2[k]){
       return false;
@@ -20,8 +20,8 @@ var objEquals = function(obj1, obj2, keys){
 };
 
 // check whether a given array `arr` contains an object `obj` that has the same values for the given keys:
-var objInArray = function(obj, arr, keys){
-  for (el of arr){
+const objInArray = function(obj, arr, keys){
+  for (const el of arr){
     if (objEquals(obj, el, keys)){
       return true;
     }
@@ -30,19 +30,19 @@ var objInArray = function(obj, arr, keys){
 }
 
 // expand book relations: add related books for each related book (recursive):
-var expandBookRelations = function(d, n){
+const expandBookRelations = function(d, n){
   console.log(n+" recursions to go");
   if (n === 0){
     return d;
   }
   n = n-1;
-  var added_book_rels = 0;
-  var bookuris = Object.keys(d);
-  var newD = {};
+  let added_book_rels = 0;
+  let bookuris = Object.keys(d);
+  let newD = {};
   for (const bookuri of bookuris){
     //console.log(bookuri)
     newD[bookuri] = d[bookuri];
-    var all_rel_books = [];
+    let all_rel_books = [];
     for (const rel of d[bookuri]){
       for (const ds of ["source", "dest"]){
       //for (const ds of ["dest"]){
@@ -76,8 +76,8 @@ var expandBookRelations = function(d, n){
 
 
 // load book relations metadata:
-var bookRelations = (function(){
-  var relData = null;
+const bookRelations = (function(){
+  let relData = null;
   $.ajax({
     'async': false,
     'global': false,
@@ -95,7 +95,7 @@ var bookRelations = (function(){
 
 
 // define whether edge objects have the same `from`, `to` and `label` values
-var edgeEquals = function(edge, edge2){
+const edgeEquals = function(edge, edge2){
   /*for (const el of ["from", "to", "label"]){
     console.log(el);
     if (edge[el] !== edge2[el]){
@@ -107,7 +107,7 @@ var edgeEquals = function(edge, edge2){
 };
 
 // verbose explanation of the main book relation types, seen from the yml text:
-var bookRelVerbsSrc = {
+const bookRelVerbsSrc = {
   "COMM": " is a commentary on ",
   "ABR": " is an abridgment of ",
   "COMP": " is a compilation of ",
@@ -122,7 +122,7 @@ var bookRelVerbsSrc = {
 };
 
 // verbose explanation of the main book relation types, seen from the other text:
-var bookRelVerbsDest = {
+const bookRelVerbsDest = {
   "COMM": " was commented on by ",
   "ABR": " was abridged by ",
   "COMP": " was compiled by ",
@@ -137,7 +137,7 @@ var bookRelVerbsDest = {
 };
 
 // define the colors to be used for the edges, dependent on the main relation type:
-var edge_colors = {
+const edge_colors = {
   "COMM": "blue",
   "ABR": "lightgray",
   "COMP": "red",
@@ -153,7 +153,7 @@ var edge_colors = {
 
 // define the roundness of the edge's curve, dependent on the main relation type:
 // (in order to avoid overlapping edges)
-var edge_roundness = {
+const edge_roundness = {
   "COMM": 0.1,
   "ABR": 1,
   "COMP": 0.3,
@@ -168,51 +168,56 @@ var edge_roundness = {
 };
 
 // create book relations graph:
-var createGraph = function(graph_div, bookuri, bookRelations){
+const createGraph = function(graph_div, bookuri, bookRelations){
   console.log("creating graph");
 
   // define the hierarchical level of each book on the graph based on its date:
-  var nodeLevels = [];
+  let nodeLevels = [];
   for (const relObj of bookRelations[bookuri]){
     for (const sd of ["source", "dest"]) {
+      let date;
       try {
-        var date = parseInt(relObj[sd].substr(0,4));
-        console.log(date);
-        if (!nodeLevels.includes(date)) {
-          nodeLevels.push(date);
-        }
+        date = parseInt(relObj[sd].substr(0,4));
+        //console.log(date);
+        //if (!nodeLevels.includes(date)) {
+        //  nodeLevels.push(date);
+        //}
       }
       catch(e) {
-        var date = parseInt(bookuri.substr(0,4));
+        date = parseInt(bookuri.substr(0,4));
+      }
+      console.log(date);
+      if (!nodeLevels.includes(date)) {
+        nodeLevels.push(date);
       }
     }
   }
   nodeLevels.sort();
 
   // initialize nodes and edges datasets:
-  var mainDate = parseInt(bookuri.substr(0,4));
-  level = nodeLevels.indexOf(mainDate);
-  var nodes = new vis.DataSet([{
+  let mainDate = parseInt(bookuri.substr(0,4));
+  let level = nodeLevels.indexOf(mainDate);
+  let nodes = new vis.DataSet([{
     id: bookuri,
     label: bookuri,
     level: level,
     color: "red"  // give the main book node a different color
   }]);
   //var edges = new vis.DataSet([]);
-  var edges = [];
+  let edges = [];
 
   // add the data to the nodes and edges datasets:
   for (const relObj of bookRelations[bookuri]){
     // add nodes:
     for (const sd of ["source", "dest"]) {
       try {
-        var date = parseInt(relObj[sd].substr(0,4));
+        let date = parseInt(relObj[sd].substr(0,4));
         //console.log(date);
         level = nodeLevels.indexOf(date);
         //console.log(level);
       }
       catch(e) { // no date found in book id: put book on same level as main book
-        var date = parseInt(bookuri.substr(0,4));
+        let date = parseInt(bookuri.substr(0,4));
         level = nodeLevels.indexOf(date);
         //console.log(level);
       }
@@ -228,7 +233,7 @@ var createGraph = function(graph_div, bookuri, bookRelations){
         console.log(relObj[sd] + " already in nodes list");
       }
       // add edges:
-      var edge = {
+      let edge = {
         from: relObj["source"],
         to: relObj["dest"],
         label: relObj["main_rel_type"],  // will be displayed on the edge
@@ -249,11 +254,11 @@ var createGraph = function(graph_div, bookuri, bookRelations){
   }
   console.log(edges);
   // provide the data in the vis format
-  var data = {
+  let data = {
     nodes: nodes,
     edges: edges
   };
-  var options = {
+  let options = {
     nodes: {
       shape: "box"
     },
@@ -310,7 +315,7 @@ var createGraph = function(graph_div, bookuri, bookRelations){
   };
 
   // initialize the network:
-  var network = new vis.Network(graph_div, data, options);
+  let network = new vis.Network(graph_div, data, options);
 
   // use physics only to get the initial network balanced out; do not use after user moved nodes:
   network.on("stabilizationIterationsDone", function () {
@@ -319,7 +324,7 @@ var createGraph = function(graph_div, bookuri, bookRelations){
 
   // make it possible to save the network:
   network.on("afterDrawing", function (ctx) {
-    var dataURL = ctx.canvas.toDataURL();
+    let dataURL = ctx.canvas.toDataURL();
     document.getElementById('downloadGraph').href = dataURL;
     document.getElementById('downloadGraph').download = bookuri + "_relations.png";
   });
@@ -327,16 +332,17 @@ var createGraph = function(graph_div, bookuri, bookRelations){
 }
 
 // Add book relations info to the modal popup:
-var fillModal = function(bookuri, graph_div){
+//let fillModal = function(bookuri, graph_div){
+let fillModal = function(bookuri){
   console.log("filling modal");
   console.log(bookuri);
-  var bookRelationsModal = $("#bookRelModal");
+  let bookRelationsModal = $("#bookRelModal");
   bookRelationsModal.find('.modal-title').text('Books related to ' + bookuri);
-  var relStr = "<ul>";
+  let relStr = "<ul>";
   console.log(bookuri);
   console.log(bookRelations[bookuri]);
-  for (i = 0; i < bookRelations[bookuri].length; i++) {
-    var relObj = bookRelations[bookuri][i];
+  for (let i = 0; i < bookRelations[bookuri].length; i++) {
+    let relObj = bookRelations[bookuri][i];
     if (bookuri === relObj["source"]) {
       relStr += "<li>" + (bookRelVerbsSrc[relObj["main_rel_type"]] || " " + relObj["main_rel_type"] + " ") + relObj["dest"] + "</li>";
     } else {
@@ -346,7 +352,7 @@ var fillModal = function(bookuri, graph_div){
   relStr += "</ul>";
 
   //bookRelationsModal.find('.modal-body').html(relStr);
-  var graph_div = document.getElementById("graph");
+  let graph_div = document.getElementById("graph");
   console.log(graph_div);
   createGraph(graph_div, bookuri, bookRelations);
   $("#bookRelModal").modal("toggle");
@@ -469,7 +475,7 @@ $(document).ready(function () {
 
                     // make Github yml URL
                     //Author from versionUri - taking the first part which give author with date e.g. 0322CabdAllahMahdi
-                    s = row['url'].replace('https://raw.githubusercontent.com', 'https://github.com')
+                    let s = row['url'].replace('https://raw.githubusercontent.com', 'https://github.com')
 
                     s = s.replace('master/data/', 'blob/master/data/')
                     s = s.replace('.completed', '')
@@ -483,17 +489,18 @@ $(document).ready(function () {
                     f = "<a href ='" + s + "' target=_blank><img src='images/yml.png' height=16 title='" + s + "'/></a>"
                     ymlFile = "<span class='ymlfile'>" + f + "</span>"
 
+                    let cellContent = "";
 
                     // add color-coded marker for annotation status of the version:
-                    var ext = row["url"].split(".")[row["url"].split(".").length - 1];
+                    let ext = row["url"].split(".")[row["url"].split(".").length - 1];
                     if (ext === 'completed') {
-                        var cellContent = " <i class='fas fa-record-vinyl " + ext + "' title='Annotation completed'></i>";
+                        cellContent += " <i class='fas fa-record-vinyl " + ext + "' title='Annotation completed'></i>";
                     } else if (ext === 'mARkdown') {
-                        var cellContent = " <i class='fas fa-record-vinyl " + ext + "' title='Annotation completed and vetted'></i>";
+                        cellContent += " <i class='fas fa-record-vinyl " + ext + "' title='Annotation completed and vetted'></i>";
                     } else if (ext === 'inProgress') {
-                        var cellContent = " <i class='fas fa-record-vinyl " + ext + "' title='Annotation in progress'></i>";
+                        cellContent += " <i class='fas fa-record-vinyl " + ext + "' title='Annotation in progress'></i>";
                     } else {
-                        var cellContent = " <i class='fas fa-record-vinyl not-annotated' title='Not yet annotated'></i>";
+                        cellContent += " <i class='fas fa-record-vinyl not-annotated' title='Not yet annotated'></i>";
                     }
 
                     // add version ID + link to the full text
@@ -509,43 +516,41 @@ $(document).ready(function () {
                     if (row['status'] === 'pri') {
                         bookStatusTag = '<p title="This is the primary version of this text">PRI</p>'
                     } else {
-                        bookStatusTag = '<p title="This is the secondary version of this text">SEC</p>'
+                        bookStatusTag = '<p title="This is a secondary version of this text">SEC</p>'
                     }
 
                     topDivOpen += cellContent + bookURISpan + bookStatusTag
 
                     // add links to issues related to this text version:
                     if (row["version_issues"].length > 0) {
-                        var tag = '<span class="extant issues">';
-                        //console.log(row["book"] + ": ");
+                        let tag = '<span class="extant issues">';
+                        //console.log(row["id"] + ": ");
                         //console.log(row["version_issues"])
                         row["version_issues"].forEach(function (item) {
                             if (item[1] === "URI change suggestion") {
-                                var changeUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Change URI issue " + item[0] + " on GitHub'> <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>"
+                                let changeUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Change URI issue " + item[0] + " on GitHub'> <i class='fas fa-exchange-alt' aria-hidden='true'></i></a>"
                                 tag += changeUri;
                             } else if (item[1] === "PRI & SEC Versions") {
-                                var priSec = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Switch primary/secondary issue " + item[0] + " on GitHub'> <i class='fas fa-sync-alt bug' aria-hidden='true'></i></a>";
+                                let priSec = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Switch primary/secondary issue " + item[0] + " on GitHub'> <i class='fas fa-sync-alt' aria-hidden='true'></i></a>";
                                 tag += priSec;
                             } else if (item[1] === "text quality") {
-                                var textQual = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Text quality issue " + item[0] + " on GitHub'> <i class='fas fa-bug' aria-hidden='true'></i></a>";
+                                let textQual = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Text quality issue " + item[0] + " on GitHub'> <i class='fas fa-bug' aria-hidden='true'></i></a>";
                                 tag += textQual;
                             }
                         });
-                        cellContent += tag + '<br/></span>';
+                        //cellContent += tag + '</span><br/>';
+                        topDivOpen += tag + '</span><br/>';
                     }
 
-                    // wrap the current contents in a div; vertically aligned with the top
-                    cellContent = '<div>' + cellContent + "<br/><br/><br/></div>";
-
                     // add a new div, vertically aligned with the bottom, with links to raise issues:
-                    var versionuri = row['url'].split('/')[9];
-                    var opentag = '<span class="issues">';
-                    var textQuality = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=text+quality&template=text-quality-issue-.md&title=" + versionuri + "'target=_blank title='Full Text Quality Issue - raise issue on GitHub'> <i class='fas fa-bug bug' aria-hidden='true'></i></a>";
-                    var inProgress = " <a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=in+progress&template=in-progress.md&title=IN+PROGRESS: " + versionuri + "'target=_blank title='Report Text In Progress  - raise issue on GitHub'> <i class='fas fa-tasks bug' aria-hidden='true'></i></a>";
-                    var completedText = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=text+tagged&template=submission-report--for-pull-requests-.md&title=" + versionuri + "'target=_blank title='Report Text Tagged - raise issue on GitHub'> <i class='fas fa-tag bug'aria-hidden='true' ></i></a>";
-                    var changeUri = issueURItempl + versionuri + "' target=_blank title='Change URI - raise issue on GitHub'> <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>";
-                    var priSec = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=PRI+%26+SEC+Versions&template=pri-vs-sec.md&title=" + versionuri + "'target=_blank title='Request change of primary text - raise issue on GitHub'> <i class='fas fa-sync-alt bug' aria-hidden='true'></i></a>";
-                    var endtag = '</span>';
+                    let versionuri = row['url'].split('/')[9];
+                    let opentag = '<span class="issues">';
+                    let textQuality = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=text+quality&template=text-quality-issue-.md&title=" + versionuri + "'target=_blank title='Full Text Quality Issue - raise issue on GitHub'> <i class='fas fa-bug bug' aria-hidden='true'></i></a>";
+                    let inProgress = " <a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=in+progress&template=in-progress.md&title=IN+PROGRESS: " + versionuri + "'target=_blank title='Report Text In Progress  - raise issue on GitHub'> <i class='fas fa-tasks bug' aria-hidden='true'></i></a>";
+                    let completedText = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=text+tagged&template=submission-report--for-pull-requests-.md&title=" + versionuri + "'target=_blank title='Report Text Tagged - raise issue on GitHub'> <i class='fas fa-tag bug'aria-hidden='true' ></i></a>";
+                    let changeUri = issueURItempl + versionuri + "' target=_blank title='Change URI - raise issue on GitHub'> <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>";
+                    let priSec = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=PRI+%26+SEC+Versions&template=pri-vs-sec.md&title=" + versionuri + "'target=_blank title='Request change of primary text - raise issue on GitHub'> <i class='fas fa-sync-alt bug' aria-hidden='true'></i></a>";
+                    let endtag = '</span>';
                     //var isnadbar = "<div class='isnad-bar-outer'><div class='isnad-bar-inner'> Isnad Tag Count: " + row['Isnad Tag Count'] + "<br/> Fraction: " + (parseFloat(row['Isnad Fraction']) * 100).toFixed(3) + "%</div></div>"
                     return topDivOpen + '<div class="add-issue">Raise a version issue <br/>' + opentag + changeUri + textQuality + completedText + inProgress + priSec + endtag + TopDivClosed + "</div>";
                 }
@@ -561,12 +566,12 @@ $(document).ready(function () {
 
 
 
-                                        // make link to raise issue with the book title URI:
-                    var split_url = row['url'].split('/');
-                    var versionuri = split_url[split_url.length - 1];
-                    var bookuri = versionuri.split(".").slice(0, 2).join(".");
+                    // make link to raise issue with the book title URI:
+                    let split_url = row['url'].split('/');
+                    let versionuri = split_url[split_url.length - 1];
+                    let bookuri = versionuri.split(".").slice(0, 2).join(".");
 
-                    var cellContent = "<div style='position:relative'><div style='float:right'><strong>"
+                    let cellContent = "<div style='position:relative'><div style='float:right'><strong>"
 
                     // make link to book folder on GitHub:
                     d = data.substring(0, 4);
@@ -575,7 +580,9 @@ $(document).ready(function () {
                     //console.log(bookFolderUrl)
                     cellContent += '<a href="' + bookFolderUrl + '" target="_blank" title="' + bookFolderUrl + '">'
 
-                    var link = bookFolderUrl + '/' + data + '.yml';
+                    let link = bookFolderUrl + '/' + data + '.yml';
+                    let modalButton = "";
+                    let hiddenDiv = "";
 
                     // add a hidden div with button to a popup modal:
                     if (bookRelations.hasOwnProperty(bookuri)) {
@@ -583,12 +590,12 @@ $(document).ready(function () {
                       //... : add related book URIs
                       //modalButton = '<button type="button" onclick="fillModal(\''+bookuri+'\')">Book relations</button>';
                       //relDiv += modalButton + "</div>"
-                      var modalButton = '<img src="images/bookRel.png" height="16" title="book relations" onclick="fillModal(\''+bookuri+'\')"></img>';
-                      var hiddenDiv = '<div style="display: none;">';
+                      modalButton = '<img src="images/bookRel.png" height="16" title="book relations" onclick="fillModal(\''+bookuri+'\')"></img>';
+                      hiddenDiv = '<div style="display: none;">';
                       //hiddenDiv += bookRelations[bookuri];
-                      var hiddenDivStr = "Book relations: ";
-                      for (i = 0; i < bookRelations[bookuri].length; i++) {
-                        var relObj = bookRelations[bookuri][i];
+                      let hiddenDivStr = "Book relations: ";
+                      for (let i = 0; i < bookRelations[bookuri].length; i++) {
+                        let relObj = bookRelations[bookuri][i];
                         if (relObj["source"] !== bookuri){
                           if (!hiddenDivStr.includes(relObj["source"])){
                             hiddenDivStr += " " + relObj["source"] + "(" + relObj["main_rel_type"] + "." + relObj["sec_rel_type"] + ")";
@@ -602,16 +609,13 @@ $(document).ready(function () {
                       }
                       hiddenDiv += hiddenDivStr + '</div>';
                       //cellContent = cellContent + relDiv + hiddenDiv;
-                    } else {
-                      var modalButton = "";
-                      var hiddenDiv = "";
-                    }
+                    } 
 
                     f = "<a href ='" + link + "' target=_blank><img src='images/yml.png' height=16 title='" + link + "'/></a>"
-                    var ymlFile = '<span class=ymlfile>' + f + modalButton + '</span>' + hiddenDiv
+                    let ymlFile = '<span class=ymlfile>' + f + modalButton + '</span>' + hiddenDiv
 
                     // make Latin version of book title and add to cellContent:
-                    var i = data.indexOf('.')
+                    let i = data.indexOf('.')
                     data = data.substring(i + 1);
                     data = data.replace(/([A-Z])/g, ' $1').trim();
                     //cellContent += data + '</a><br/></strong>' + row['title'].split("::")[1];
@@ -619,13 +623,13 @@ $(document).ready(function () {
 
                     //
                     if (row["book_issues"].length > 0) {
-                        var tag = '<span class="extant issues">';
+                        let tag = '<span class="extant issues">';
                         row["book_issues"].forEach(function (item) {
                             if (item[1] === "URI change suggestion") {
-                                var changeUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Change URI issue " + item[0] + " on GitHub'> <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>"
+                                let changeUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Change URI issue " + item[0] + " on GitHub'> <i class='fas fa-exchange-alt' aria-hidden='true'></i></a>"
                                 tag += changeUri;
                             } else if (item[1] === "text quality") {
-                                var textQual = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Text quality issue " + item[0] + " on GitHub'> <i class='fas fa-bug' aria-hidden='true'></i></a>";
+                                let textQual = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Text quality issue " + item[0] + " on GitHub'> <i class='fas fa-bug' aria-hidden='true'></i></a>";
                                 tag += textQual;
                                 //console.log("Text quality issue: "+row["book"]);
                             }
@@ -638,12 +642,12 @@ $(document).ready(function () {
                     cellContent += '<br/><br/></div></div>';
 
 
-                    var intro = '<div class="add-issue">Raise a book title issue<br/>';
-                    var opentag = '<span class="issues">';
-                    var changeUri = issueURItempl + bookuri + "' target=_blank title='Change title URI - raise issue on GitHub'>";
+                    let intro = '<div class="add-issue">Raise a book title issue<br/>';
+                    let opentag = '<span class="issues">';
+                    let changeUri = issueURItempl + bookuri + "' target=_blank title='Change title URI - raise issue on GitHub'>";
                     changeUri += " <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>";
-                    //var endtag = '</span>';
-                    var endtag = '</span></div>';
+                    //let endtag = '</span>';
+                    let endtag = '</span></div>';
 
                     //return cellContent + intro + opentag + changeUri + endtag;
                     cellContent = cellContent + intro + opentag + changeUri + endtag;
@@ -682,9 +686,9 @@ $(document).ready(function () {
                     d = pad(Math.ceil(d / 25) * 25, 4);
                     authorUrl = 'https://github.com/OpenITI/' + d + 'AH' + '/tree/master/data/' + row["book"].split(".")[0];
                     d = checknull(data);
-                    var authorLink = '<strong><a href="' + authorUrl + '" target="_blank" title="' + authorUrl + '">';
+                    let authorLink = '<strong><a href="' + authorUrl + '" target="_blank" title="' + authorUrl + '">';
                     authorLink += d.split("::")[0] + '</a></strong>';
-                    var authorDiv = "<div class='author text-wrap;' style='float:right;'>" + authorLink + ymlFile + "<br/>";
+                    let authorDiv = "<div class='author text-wrap;' style='float:right;'>" + authorLink + ymlFile + "<br/>";
 
                     // add the Arabic version(s) of the author name:
                     if (row["author_ar"].length > 0) {
@@ -693,12 +697,12 @@ $(document).ready(function () {
 
                     // add links to GitHub issues related to the author uri:
                     if (row["author_issues"].length > 0) {
-                        var tag = '<span class="extant issues">';
+                        let tag = '<span class="extant issues">';
                         row["author_issues"].forEach(function (item) {
                             if (item[1] === "URI change suggestion") {
-                                var issueUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0];
+                                let issueUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0];
                                 issueUri += "' target=_blank title='Change URI issue " + item[0] + " on GitHub'>";
-                                issueUri += " <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>";
+                                issueUri += " <i class='fas fa-exchange-alt' aria-hidden='true'></i></a>";
                                 tag += issueUri;
                             }
                         });
@@ -712,14 +716,14 @@ $(document).ready(function () {
 
 
                     // Add link to raise issues about the author URI:
-                    var split_url = row['url'].split('/');
-                    var versionuri = split_url[split_url.length - 1];
-                    var authoruri = versionuri.split(".")[0];
-                    var intro = '<div class="add-issue">Raise an author issue <br/>';
-                    var opentag = '<span class="issues">';
-                    var changeUri = issueURItempl + authoruri + "' target=_blank title='Change URI - raise issue on GitHub'>";
+                    let split_url = row['url'].split('/');
+                    let versionuri = split_url[split_url.length - 1];
+                    let authoruri = versionuri.split(".")[0];
+                    let intro = '<div class="add-issue">Raise an author issue <br/>';
+                    let opentag = '<span class="issues">';
+                    let changeUri = issueURItempl + authoruri + "' target=_blank title='Change URI - raise issue on GitHub'>";
                     changeUri += " <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>";
-                    var endtag = '</span>';
+                    let endtag = '</span>';
 
                     return authorDiv + intro + opentag + changeUri + endtag;
                 }
@@ -787,7 +791,7 @@ $(document).ready(function () {
     });
 
     table.on('xhr', function () {
-        var json = table.ajax.json();
+        let json = table.ajax.json();
         //alert( json.data.length +' row(s) were loaded' );
         if (json['date']) {
             dt = json['date'] + " - " + json['time']
