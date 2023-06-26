@@ -1,6 +1,6 @@
 var table;
+const url = "https://raw.githubusercontent.com/OpenITI/kitab-metadata-automation/master/output/OpenITI_Github_clone_metadata_light.json?v1"
 var issueURItempl = "<a href ='https://github.com/OpenITI/Annotation/issues/new?";
-var url = "https://raw.githubusercontent.com/OpenITI/kitab-metadata-automation/master/output/OpenITI_Github_clone_metadata_light.json?v1"
 issueURItempl += "assignees=&labels=URI+change+suggestion&template=change-uri.md&title=";
 //url ="db/OpenITI_metadata_light-isnad-arabic-28052020.json"
 // Add Arabic font for pdfMake:
@@ -131,20 +131,21 @@ $(document).ready(function () {
                     f = "<a href ='" + s + "' target=_blank><img src='images/yml.png' height=16 title='" +  s +  "'/></a>"
                     ymlFile = "<span class='ymlfile'>" + f + "</span>"
 
-                    var reader = "<a href='http://dev.kitab-project.org/lite-reader/" + row['versionUri'] + "' class='reader' target='_blank'><i class='fa fa-book' aria-hidden='true' title='Read the book'></i></a>"
+                    let reader = "<a href='http://dev.kitab-project.org/lite-reader/" + row['versionUri'] + "' class='reader' target='_blank'><i class='fa fa-book' aria-hidden='true' title='Read the book'></i></a>"
 
                     //var fileDownload = "<a href='" + row['url'] + "' target='_blank' download><i class='fas fa-file-download' aria-hidden='true' title='Download the text'></i></a>"
 
                     // add color-coded marker for annotation status of the version:
-                    var ext = row["url"].split(".")[row["url"].split(".").length - 1];
+                    let ext = row["url"].split(".")[row["url"].split(".").length - 1];
+                    let cellContent = "";
                     if (ext === 'completed') {
-                        var cellContent = " <i class='fas fa-record-vinyl " + ext + "' title='Annotation completed'></i>";
+                        cellContent += " <i class='fas fa-record-vinyl " + ext + "' title='Annotation completed'></i>";
                     } else if (ext === 'mARkdown') {
-                        var cellContent = " <i class='fas fa-record-vinyl " + ext + "' title='Annotation completed and vetted'></i>";
+                        cellContent += " <i class='fas fa-record-vinyl " + ext + "' title='Annotation completed and vetted'></i>";
                     } else if (ext === 'inProgress') {
-                        var cellContent = " <i class='fas fa-record-vinyl " + ext + "' title='Annotation in progress'></i>";
+                        cellContent += " <i class='fas fa-record-vinyl " + ext + "' title='Annotation in progress'></i>";
                     } else {
-                        var cellContent = " <i class='fas fa-record-vinyl not-annotated' title='Not yet annotated'></i>";
+                        cellContent += " <i class='fas fa-record-vinyl not-annotated' title='Not yet annotated'></i>";
                     }
 
                     // add version ID + link to the full text
@@ -169,36 +170,34 @@ $(document).ready(function () {
 
                     // add links to issues related to this text version:
                     if (row["version_issues"].length > 0) {
-                        var tag = '<span class="extant issues">';
+                        let tag = '<span class="extant issues">';
                         //console.log(row["book"] + ": ");
                         //console.log(row["version_issues"])
                         row["version_issues"].forEach(function (item) {
                             if (item[1] === "URI change suggestion") {
-                                var changeUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Change URI issue " + item[0] + " on GitHub'> <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>"
+                                let changeUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Change URI issue " + item[0] + " on GitHub'> <i class='fas fa-exchange-alt' aria-hidden='true'></i></a>"
                                 tag += changeUri;
                             } else if (item[1] === "PRI & SEC Versions") {
-                                var priSec = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Switch primary/secondary issue " + item[0] + " on GitHub'> <i class='fas fa-sync-alt bug' aria-hidden='true'></i></a>";
+                                let priSec = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Switch primary/secondary issue " + item[0] + " on GitHub'> <i class='fas fa-sync-alt' aria-hidden='true'></i></a>";
                                 tag += priSec;
                             } else if (item[1] === "text quality") {
-                                var textQual = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Text quality issue " + item[0] + " on GitHub'> <i class='fas fa-bug' aria-hidden='true'></i></a>";
+                                let textQual = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Text quality issue " + item[0] + " on GitHub'> <i class='fas fa-bug' aria-hidden='true'></i></a>";
                                 tag += textQual;
                             }
                         });
-                        cellContent += tag + '<br/></span>';
+                        //cellContent += tag + '<br/></span>';
+                        topDivOpen += tag + '<br/></span>';
                     }
 
-                    // wrap the current contents in a div; vertically aligned with the top
-                    cellContent = '<div>' + cellContent + "<br/><br/><br/></div>";
-
                     // add a new div, vertically aligned with the bottom, with links to raise issues:
-                    var versionuri = row['url'].split('/')[9];
-                    var opentag = '<span class="issues">';
-                    var textQuality = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=text+quality&template=text-quality-issue-.md&title=" + versionuri + "'target=_blank title='Full Text Quality Issue - raise issue on GitHub'> <i class='fas fa-bug bug' aria-hidden='true'></i></a>";
-                    var inProgress = " <a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=in+progress&template=in-progress.md&title=IN+PROGRESS: " + versionuri + "'target=_blank title='Report Text In Progress  - raise issue on GitHub'> <i class='fas fa-tasks bug' aria-hidden='true'></i></a>";
-                    var completedText = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=text+tagged&template=submission-report--for-pull-requests-.md&title=" + versionuri + "'target=_blank title='Report Text Tagged - raise issue on GitHub'> <i class='fas fa-tag bug'aria-hidden='true' ></i></a>";
-                    var changeUri = issueURItempl + versionuri + "' target=_blank title='Change URI - raise issue on GitHub'> <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>";
-                    var priSec = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=PRI+%26+SEC+Versions&template=pri-vs-sec.md&title=" + versionuri + "'target=_blank title='Request change of primary text - raise issue on GitHub'> <i class='fas fa-sync-alt bug' aria-hidden='true'></i></a>";
-                    var endtag = '</span>';
+                    let versionuri = row['url'].split('/')[9];
+                    let opentag = '<span class="issues">';
+                    let textQuality = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=text+quality&template=text-quality-issue-.md&title=" + versionuri + "'target=_blank title='Full Text Quality Issue - raise issue on GitHub'> <i class='fas fa-bug bug' aria-hidden='true'></i></a>";
+                    let inProgress = " <a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=in+progress&template=in-progress.md&title=IN+PROGRESS: " + versionuri + "'target=_blank title='Report Text In Progress  - raise issue on GitHub'> <i class='fas fa-tasks bug' aria-hidden='true'></i></a>";
+                    let completedText = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=text+tagged&template=submission-report--for-pull-requests-.md&title=" + versionuri + "'target=_blank title='Report Text Tagged - raise issue on GitHub'> <i class='fas fa-tag bug'aria-hidden='true' ></i></a>";
+                    let changeUri = issueURItempl + versionuri + "' target=_blank title='Change URI - raise issue on GitHub'> <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>";
+                    let priSec = "<a href='https://github.com/OpenITI/Annotation/issues/new?assignees=&labels=PRI+%26+SEC+Versions&template=pri-vs-sec.md&title=" + versionuri + "'target=_blank title='Request change of primary text - raise issue on GitHub'> <i class='fas fa-sync-alt bug' aria-hidden='true'></i></a>";
+                    let endtag = '</span>';
                     //var isnadbar = "<div class='isnad-bar-outer'><div class='isnad-bar-inner'> Isnad Tag Count: " + row['Isnad Tag Count'] + "<br/> Fraction: " + (parseFloat(row['Isnad Fraction']) * 100).toFixed(3) + "%</div></div>"
                     return topDivOpen + '<div class="add-issue">Raise a version issue <br/>' + opentag + changeUri + textQuality + completedText + inProgress + priSec + endtag + TopDivClosed + "</div>";
                 }
@@ -212,7 +211,7 @@ $(document).ready(function () {
                         return data;
                     }
 
-                    var cellContent = "<div style='float:right'><strong>"
+                    let cellContent = "<div style='float:right'><strong>"
 
                     // make link to book folder on GitHub:
                     d = data.substring(0, 4);
@@ -221,13 +220,13 @@ $(document).ready(function () {
                     //console.log(bookFolderUrl)
                     cellContent += '<a href="' + bookFolderUrl + '" target="_blank" title="' + bookFolderUrl + '">'
 
-                    var link = bookFolderUrl+'/'+data+'.yml';
+                    let link = bookFolderUrl+'/'+data+'.yml';
 
                     f = "<a href ='" + link + "' target=_blank><img src='images/yml.png' height=16 title='" +  link +  "'/></a>"
-                    var ymlFile = '<span class=ymlfile>' + f + '</span>'
+                    let ymlFile = '<span class=ymlfile>' + f + '</span>'
 
                     // make Latin version of book title and add to cellContent:
-                    var i = data.indexOf('.')
+                    let i = data.indexOf('.')
                     data = data.substring(i + 1);
                     data = data.replace(/([A-Z])/g, ' $1').trim();
                     //cellContent += data + '</a><br/></strong>' + row['title'].split("::")[1];
@@ -235,13 +234,13 @@ $(document).ready(function () {
 
                     //
                     if (row["book_issues"].length > 0) {
-                        var tag = '<span class="extant issues">';
+                        let tag = '<span class="extant issues">';
                         row["book_issues"].forEach(function (item) {
                             if (item[1] === "URI change suggestion") {
-                                var changeUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Change URI issue " + item[0] + " on GitHub'> <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>"
+                                let changeUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Change URI issue " + item[0] + " on GitHub'> <i class='fas fa-exchange-alt' aria-hidden='true'></i></a>"
                                 tag += changeUri;
                             } else if (item[1] === "text quality") {
-                                var textQual = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Text quality issue " + item[0] + " on GitHub'> <i class='fas fa-bug' aria-hidden='true'></i></a>";
+                                let textQual = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0] + "' target=_blank title='Text quality issue " + item[0] + " on GitHub'> <i class='fas fa-bug' aria-hidden='true'></i></a>";
                                 tag += textQual;
                                 //console.log("Text quality issue: "+row["book"]);
                             }
@@ -254,14 +253,14 @@ $(document).ready(function () {
                     cellContent += '<br/><br/></div>'
 
                     // make link to raise issue with the book title URI:
-                    var split_url = row['url'].split('/');
-                    var versionuri = split_url[split_url.length - 1];
-                    var bookuri = versionuri.split(".").slice(0, 2).join(".");
-                    var intro = '<div class="add-issue">Raise a book title issue<br/>';
-                    var opentag = '<span class="issues">';
-                    var changeUri = issueURItempl + bookuri + "' target=_blank title='Change title URI - raise issue on GitHub'>";
+                    let split_url = row['url'].split('/');
+                    let versionuri = split_url[split_url.length - 1];
+                    let bookuri = versionuri.split(".").slice(0, 2).join(".");
+                    let intro = '<div class="add-issue">Raise a book title issue<br/>';
+                    let opentag = '<span class="issues">';
+                    let changeUri = issueURItempl + bookuri + "' target=_blank title='Change title URI - raise issue on GitHub'>";
                     changeUri += " <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>";
-                    var endtag = '</span>';
+                    let endtag = '</span>';
 
                     return cellContent + intro + opentag + changeUri + endtag;
                 }
@@ -296,9 +295,9 @@ $(document).ready(function () {
                     d = pad(Math.ceil(d / 25) * 25, 4);
                     authorUrl = 'https://github.com/OpenITI/' + d + 'AH' + '/tree/master/data/' + row["book"].split(".")[0];
                     d = checknull(data);
-                    var authorLink = '<strong><a href="' + authorUrl + '" target="_blank" title="' + authorUrl + '">';
+                    let authorLink = '<strong><a href="' + authorUrl + '" target="_blank" title="' + authorUrl + '">';
                     authorLink += d.split("::")[0] + '</a></strong>';
-                    var authorDiv = "<div class='author text-wrap;' style='float:right;'>" + authorLink + ymlFile + "<br/>";
+                    let authorDiv = "<div class='author text-wrap;' style='float:right;'>" + authorLink + ymlFile + "<br/>";
 
                     // add the Arabic version(s) of the author name:
                     if (row["author_ar"].length > 0) {
@@ -307,12 +306,12 @@ $(document).ready(function () {
 
                     // add links to GitHub issues related to the author uri:
                     if (row["author_issues"].length > 0) {
-                        var tag = '<span class="extant issues">';
+                        let tag = '<span class="extant issues">';
                         row["author_issues"].forEach(function (item) {
                             if (item[1] === "URI change suggestion") {
-                                var issueUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0];
+                                let issueUri = "<a href ='https://github.com/OpenITI/Annotation/issues/" + item[0];
                                 issueUri += "' target=_blank title='Change URI issue " + item[0] + " on GitHub'>";
-                                issueUri += " <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>";
+                                issueUri += " <i class='fas fa-exchange-alt' aria-hidden='true'></i></a>";
                                 tag += issueUri;
                             }
                         });
@@ -326,14 +325,14 @@ $(document).ready(function () {
 
 
                     // Add link to raise issues about the author URI:
-                    var split_url = row['url'].split('/');
-                    var versionuri = split_url[split_url.length - 1];
-                    var authoruri = versionuri.split(".")[0];
-                    var intro = '<div class="add-issue">Raise an author issue <br/>';
-                    var opentag = '<span class="issues">';
-                    var changeUri = issueURItempl + authoruri + "' target=_blank title='Change URI - raise issue on GitHub'>";
+                    let split_url = row['url'].split('/');
+                    let versionuri = split_url[split_url.length - 1];
+                    let authoruri = versionuri.split(".")[0];
+                    let intro = '<div class="add-issue">Raise an author issue <br/>';
+                    let opentag = '<span class="issues">';
+                    let changeUri = issueURItempl + authoruri + "' target=_blank title='Change URI - raise issue on GitHub'>";
                     changeUri += " <i class='fas fa-exchange-alt bug' aria-hidden='true'></i></a>";
-                    var endtag = '</span>';
+                    let endtag = '</span>';
 
                     return authorDiv + intro + opentag + changeUri + endtag;
                 }
@@ -386,8 +385,8 @@ $(document).ready(function () {
                 "data": "srts",
                 "render": function (data, type, row, meta) {
 
-                    var cellContent = "";
-                    for (var i = 0; i < data.length; i++) {
+                    let cellContent = "";
+                    for (let i = 0; i < data.length; i++) {
                         cellContent += '<a href="' + data[i][1] + '" target="_blank">';
                         cellContent += data[i][0] + '</a><br/>'
                         //console.log(cellContent)
@@ -414,7 +413,7 @@ $(document).ready(function () {
     });
 
     table.on('xhr', function () {
-        var json = table.ajax.json();
+        let json = table.ajax.json();
         //alert( json.data.length +' row(s) were loaded' );
         if (json['date']) {
             dt = json['date'] + " - " + json['time']
