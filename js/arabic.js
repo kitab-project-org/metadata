@@ -4,7 +4,7 @@ const bookRelationsUrl = "https://raw.githubusercontent.com/OpenITI/kitab-metada
 var issueURItempl = "<a href ='https://github.com/OpenITI/Annotation/issues/new?";
 issueURItempl += "assignees=&labels=URI+change+suggestion&template=change-uri.md&title=";
 //url ="db/OpenITI_metadata_light-isnad-arabic-28052020.json"
-
+const currentDate = new Date().toJSON().slice(0, 10); // YYYY-MM-DD
 
 
 /////////////// BOOK RELATIONS POPUP ////////////////////////////////////////////
@@ -420,13 +420,13 @@ $(document).ready(function () {
 
             {
                 extend: 'excel',
-                filename: 'kitab-corpusmetadata',
+                filename: 'kitab-corpusmetadata_'+currentDate,
                 stripHtml: true,
                 exportOptions: { orthogonal: 'rawExport' },
             },
             {
                 extend: 'csv',
-                filename: 'kitab-corpusmetadata',
+                filename: 'kitab-corpusmetadata_'+currentDate,
                 stripHtml: true,
                 exportOptions: { orthogonal: 'rawExport' },
             },
